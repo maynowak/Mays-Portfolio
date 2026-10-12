@@ -41,6 +41,16 @@ npm run preview      # serviert ./dist auf http://localhost:4173
 
 ## Vercel-Build-Einstellungen
 
+Repository enthält `vercel.json`:
+
+```json
+{
+  "framework": "vite",
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist"
+}
+```
+
 | Feld        | Wert                |
 |-------------|---------------------|
 | Framework   | Vite                |
@@ -48,9 +58,10 @@ npm run preview      # serviert ./dist auf http://localhost:4173
 | Ausgabe-Ordner | `dist`           |
 | Node-Version | >= 20             |
 
-Keine Framework-Presets zwingend nötig — Vite wird erkannt.
-Produktiv kann zusätzlich `npm run lint && npx tsc -b` als **Build Command**
-hinter `npm run build` gelegt werden (bei Bedarf).
+> **Fix (VERCEL-OUTPUT-FIX-01):** Ohne `.vercel.json` schrieb Vercel
+> `No Output Directory named "build" found after the Build completed.`
+> — Vite liefert standardmäßig in `dist/`. Die Datei zwingt Vercel dazu,
+> `dist` als Output zu nutzen.
 
 ## Technologie
 
