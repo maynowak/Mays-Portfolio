@@ -161,6 +161,33 @@ Terraform checks ............... GRAY (not applicable — static web frontend,
 - Full detail: docs/reports/05-CAREER-UNIVERSE-01-EXECUTION_LOG.md
 
 --------------------------------------------------------------------------------
+[2026-10-13] MAY-PORTFOLIO-CAREER-TIMELINE-SCOPE-01 — Kürzung der Karriereansicht
+--------------------------------------------------------------------------------
+- Auftraggeberwunsch umgesetzt: Die öffentliche Karriereansicht beginnt
+  jetzt mit „2012–10/2019 · Freelance Software Developer".
+- Entfernt aus ALLEN öffentlichen Karriereansichten: die frühere
+  Projektpraxis 2008–2012 (E-Commerce/PHP, Airconomy, J2EE/JSF/JPA/Hibernate)
+  sowie das BaFin-Projekt als eigene Timeline-Station. Beide erscheinen
+  nicht über Zeitachse, Kompetenzgruppen, Filter oder Recruiter-Ansicht.
+- Das BaFin-Fallbeispiel bleibt erhalten und ist der Freelance-Phase
+  zugeordnet (sichtbare Zeile „Zugeordnet: Freelance Software Developer
+  (2012–10/2019)" am Fallbeispiel; interner Vermerk im Datenmodell).
+- Konsistenz angepasst: 6 Stationen, order 1–6, x-Positionen 9/27/45/63/81/95
+  (gleichmäßig, keine leeren Positionen), 6 Achs-Stiele, 5 Impulsverbindungen,
+  Filterzähler Java 3 / Daten 2 / DevOps 3 / Cloud & AI 2, Statuszeile „6".
+- Prozessbefund: lokales main stand noch auf 4bfc3da, weil die vorherigen
+  Tasks direkt vom Feature-Branch nach origin/main gepusht wurden. Vor der
+  Umsetzung per fast-forward auf e9537bb nachgezogen — die Kürzung wurde
+  nachweislich auf dem vollständigen Career-Universe-Stand aufgebaut.
+- Prüf-Skriptfehler einmalig korrigiert (Simulationstest öffnete die
+  Orders-Karte statt Mays-RIS) — kein Produktfehler.
+- Checks: tsc / lint / build PASS, 55/55 Scope-E2E PASS, 46/46
+  Bestands-E2E PASS, 0 pageerrors. Desktop + Mobil, Dark + Light,
+  Tastatur und Reduced Motion geprüft.
+- Mit enthaltene, weiterhin zurückgehaltene Angaben: Weiterbildungsdetails,
+  AWS-/Terraform-Prüfungen, Vertragsbezeichnungen — unverändert.
+
+--------------------------------------------------------------------------------
 OPEN ITEMS
 --------------------------------------------------------------------------------
 - Years of professional experience: wording without a number until clarified.

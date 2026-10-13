@@ -2185,6 +2185,15 @@ code,
   color: var(--accent);
 }
 
+.case-card__station {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  color: var(--ink-faint);
+  border-top: 1px dashed var(--line);
+  padding-top: 0.6rem;
+}
+
 .case-card__note {
   margin-top: auto;
   font-size: 0.76rem;

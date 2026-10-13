@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 import type { CaseStudy } from '../data/career';
-import { caseStudies, illustrationNote } from '../data/career';
+import { caseStudies, careerStations, illustrationNote } from '../data/career';
 import { projects, profile } from '../data/portfolio';
 import { ArrowIcon, GithubIcon } from './icons';
 
@@ -78,26 +78,36 @@ export function CaseStudies() {
     <section className="quick-section" aria-labelledby="case-title">
       <h4 id="case-title">Enterprise-Fallbeispiele</h4>
       <div className="case-grid">
-        {caseStudies.map((item) => (
-          <article key={item.id} className="case-card">
-            <div className="case-card__media">
-              <CaseIllustration kind={item.illustration} />
-            </div>
-            <h5 className="case-card__client">{item.client}</h5>
-            <p className="case-card__context">{item.context}</p>
-            <p className="case-card__scope">{item.scope}</p>
-            <ul className="case-card__list">
-              {item.details.map((d) => (
-                <li key={d}>{d}</li>
-              ))}
-            </ul>
-            <p className="case-card__note">
-              {item.client === 'Deutsche Bahn'
-                ? '„RIS im Projektumfeld Deutsche Bahn“ — getrennt vom Projekt Mays-RIS.'
-                : illustrationNote}
-            </p>
-          </article>
-        ))}
+        {caseStudies.map((item) => {
+          const station = item.relatedStationId
+            ? careerStations.find((s) => s.id === item.relatedStationId)
+            : undefined;
+          return (
+            <article key={item.id} className="case-card">
+              <div className="case-card__media">
+                <CaseIllustration kind={item.illustration} />
+              </div>
+              <h5 className="case-card__client">{item.client}</h5>
+              <p className="case-card__context">{item.context}</p>
+              <p className="case-card__scope">{item.scope}</p>
+              <ul className="case-card__list">
+                {item.details.map((d) => (
+                  <li key={d}>{d}</li>
+                ))}
+              </ul>
+              {station && (
+                <p className="case-card__station">
+                  Zugeordnet: {station.title} ({station.period})
+                </p>
+              )}
+              <p className="case-card__note">
+                {item.client === 'Deutsche Bahn'
+                  ? '„RIS im Projektumfeld Deutsche Bahn" — getrennt vom Projekt Mays-RIS.'
+                  : illustrationNote}
+              </p>
+            </article>
+          );
+        })}
       </div>
     </section>
   );

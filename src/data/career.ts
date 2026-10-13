@@ -9,8 +9,15 @@
  * Quellenbegrenzung / interne Vermerke (nicht öffentlich angezeigt):
  * - Der Brief weist selbst darauf hin, dass exakte Vertrags- und
  *   Arbeitgeberbezeichnungen sowie ältere Zeiträume vor einer Veröffentlichung
- *   gegen Originalunterlagen abzugleichen sind. Öffentlich werden daher nur
- *   „Ausgewählte Projektpraxis" und „Projektumfeld" verwendet.
+ *   gegen Originalunterlagen abzugleichen sind. Öffentlich werden daher
+ *   zurückhaltende Bezeichnungen wie „Projektumfeld" verwendet.
+ * - Umfang der öffentlichen Karriereansicht (Auftraggeberwunsch,
+ *   CAREER-TIMELINE-SCOPE-01): Die Karriere beginnt öffentlich mit
+ *   „2012–10/2019 · Freelance Software Developer". Die im Brief genannte
+ *   frühere Projektpraxis 2008–2012 ist nicht mehr Teil der öffentlichen
+ *   Stationen; das BaFin-Projekt (03/2012–09/2012) ist keine eigene Station
+ *   mehr, sondern über das Fallbeispiel der Freelance-Phase zugeordnet.
+ *   Die zugrunde liegenden Angaben bleiben im Briefing nachvollziehbar.
  * - Angaben zur Weiterbildung (dauer, Zeitraum 03/2026–10/2026, Abschluss)
  *   sind laut Briefing noch nicht konsolidiert und daher nicht enthalten.
  * - AWS-/Terraform-Prüfungen sind laut Brief Ziele („in Vorbereitung") und
@@ -75,51 +82,10 @@ export interface CareerStation {
 
 export const careerStations: CareerStation[] = [
   {
-    id: 'frueher',
-    period: '2008–2012',
-    order: 1,
-    title: 'Ausgewählte Projektpraxis',
-    setting: 'Frühere Projektumgebungen',
-    activities: [
-      'E-Commerce mit PHP und MySQL',
-      'Luftverkehrs-Weboberfläche mit PDF-Generierung',
-      'GIS- und Routenplanung',
-      'J2EE-Projekte mit JSF, JPA, Hibernate und Middleware',
-    ],
-    technologies: ['PHP', 'MySQL', 'J2EE', 'JSF', 'JPA', 'Hibernate', 'Middleware', 'GIS', 'PDF'],
-    today:
-      'Grundlage für die heutige Sicht auf Datenflüsse und Systemgrenzen: unterschiedliche Datenquellen sauber zusammenführen.',
-    focuses: ['java', 'daten'],
-    x: 7,
-    side: 'above',
-    sourceNote:
-      'Brief: E-Commerce/Contenido, Airconomy, GIS sowie J2EE/JSF/JPA/Hibernate. Vertragsbezeichnungen laut Brief noch abzugleichen.',
-  },
-  {
-    id: 'bafin',
-    period: '03/2012–09/2012',
-    order: 2,
-    title: 'BaFin-Projekt',
-    setting: 'Projektumfeld Finanzaufsicht',
-    activities: [
-      'PDS-Webservices mit J2EE, Oracle und JUnit',
-      'Machbarkeitsbetrachtung zu AIX und DB2',
-      'Linux-Netzwerkanalyse',
-    ],
-    technologies: ['J2EE', 'Oracle', 'JUnit', 'AIX', 'DB2', 'Linux'],
-    today:
-      'Verbindet Entwicklung, Schnittstellen und technische Systemanalyse — dieselbe Denkweise prägt heute Architektur- und Plattformentscheidungen.',
-    focuses: ['java'],
-    x: 20,
-    side: 'below',
-    sourceNote:
-      'Brief: PDS-Webservices, AIX/DB2-Machbarkeit, Linux-Netzwerkanalyse. Vertragsbezeichnung laut Brief noch abzugleichen.',
-  },
-  {
     id: 'freelance',
     period: '2012–10/2019',
-    order: 3,
-    title: 'Freelance Software Development',
+    order: 1,
+    title: 'Freelance Software Developer',
     setting:
       'Projektumfelder u. a. Deutsche Bahn, Deutscher Zoll, FRAPORT, Teambank, Quattec/VEMAGS',
     activities: [
@@ -133,15 +99,15 @@ export const careerStations: CareerStation[] = [
     today:
       'Langjährige Integrationspraxis über mehrere Branchen hinweg — heute umgesetzt als klar definierte Systemgrenzen statt als monolithische Lösung.',
     focuses: ['java', 'daten'],
-    x: 33,
+    x: 9,
     side: 'above',
     sourceNote:
-      'Brief nennt die Projektumfelder; detaillierte Aufgaben, Teamgrößen und Ergebnisse laut Brief erst nach zusätzlicher Bestätigung.',
+      'Brief nennt die Projektumfelder; Teamgrößen und Ergebnisse erst nach zusätzlicher Bestätigung. Das BaFin-Projekt (03/2012–09/2012) ist zeitlich und inhaltlich dieser Phase zugeordnet und wird als Fallbeispiel geführt, nicht als eigene Station.',
   },
   {
     id: 'gh-inchorus',
     period: '10/2019–07/2020',
-    order: 4,
+    order: 2,
     title: 'G+H Systems / Inchorus Daccord',
     setting: 'Projektumfeld Softwareentwicklung',
     activities: [
@@ -153,7 +119,7 @@ export const careerStations: CareerStation[] = [
     today:
       'Graphbasierte Analyse und automatisierte Backends fließen heute in Datenmodellierung und Betrieb der eigenen Projekte ein.',
     focuses: ['java', 'daten'],
-    x: 46,
+    x: 27,
     side: 'below',
     sourceNote:
       'Brief: Anwendung zur Verwaltung und Analyse von Dateisystem-Berechtigungen, Backend-Automatisierung, Ergebnisoberflächen.',
@@ -161,7 +127,7 @@ export const careerStations: CareerStation[] = [
   {
     id: '4brain',
     period: '2021',
-    order: 5,
+    order: 3,
     title: 'Fullstack-Java-Projektumfeld',
     setting: 'Projektumfeld 4Brain',
     activities: [
@@ -172,13 +138,13 @@ export const careerStations: CareerStation[] = [
     today:
       'Containerisierung als Grundlage der heutigen serverlosen Deployments auf AWS.',
     focuses: ['java', 'devops'],
-    x: 59,
+    x: 45,
     side: 'above',
   },
   {
     id: '1und1',
     period: '2022',
-    order: 6,
+    order: 4,
     title: 'DevOps-Projektumfeld',
     setting: 'Projektumfeld 1und1',
     activities: [
@@ -190,13 +156,13 @@ export const careerStations: CareerStation[] = [
     today:
       'Automatisierung und reproduzierbare Umgebungen sind heute in Terraform, Installer-Flows und Policy Gates wiederzuerkennen.',
     focuses: ['devops', 'cloudai'],
-    x: 72,
+    x: 63,
     side: 'below',
   },
   {
     id: 'kreativ',
     period: '2023–2025',
-    order: 7,
+    order: 5,
     title: 'Kreative Arbeit',
     setting: 'Selbstständiges Schreiben unter Maymilly Nowak',
     creative: true,
@@ -208,7 +174,7 @@ export const careerStations: CareerStation[] = [
     today:
       'Ergänzende kreative Tätigkeit — bewusst getrennt von den IT-Stationen geführt.',
     focuses: ['kreativ'],
-    x: 85,
+    x: 81,
     side: 'above',
     sourceNote:
       'Laut Brief als kreative Tätigkeit darstellen, nicht als IT-Anstellung. Name im öffentlichen Auftritt: Maymilly Nowak.',
@@ -216,7 +182,7 @@ export const careerStations: CareerStation[] = [
   {
     id: 'aktuell',
     period: 'heute',
-    order: 8,
+    order: 6,
     title: 'Aktuelle Weiterentwicklung und eigene Projekte',
     setting: 'Eigene Projekte auf AWS',
     activities: [
@@ -229,11 +195,11 @@ export const careerStations: CareerStation[] = [
     today:
       'Hier laufen Mays-RIS, Mays Orders AWS und May’s Job Matcher zusammen — mit klarer Trennung zwischen verifizierten und vorbereiteten Funktionen.',
     focuses: ['cloudai', 'devops'],
-    x: 94,
+    x: 95,
     side: 'below',
     relatedProjectId: 'mays-ris',
     sourceNote:
-      'Weiterbildung (dauer, Zeitraum, Abschluss) laut Briefing noch nicht konsolidiert — daher ohne Angaben.',
+      'Weiterbildung (Dauer, Zeitraum, Abschluss) laut Briefing noch nicht konsolidiert — daher ohne Angaben.',
   },
 ];
 
@@ -245,6 +211,8 @@ export interface CaseStudy {
   scope: string;
   details: string[];
   illustration: 'data' | 'services' | 'office';
+  /** Zuordnung zu einer Karriere-Station (optional). */
+  relatedStationId?: string;
 }
 
 export const caseStudies: CaseStudy[] = [
@@ -259,6 +227,7 @@ export const caseStudies: CaseStudy[] = [
       'GIS- und Geodatenbezug',
     ],
     illustration: 'data',
+    relatedStationId: 'freelance',
   },
   {
     id: 'bafin-case',
@@ -271,6 +240,8 @@ export const caseStudies: CaseStudy[] = [
       'Linux-Netzwerkanalyse',
     ],
     illustration: 'services',
+    // Kein eigener Zeitraum-Punkt: das Projekt gehört zur Freelance-Phase.
+    relatedStationId: 'freelance',
   },
   {
     id: 'zoll',
@@ -282,6 +253,7 @@ export const caseStudies: CaseStudy[] = [
       'Fachverfahren mit Anforderungen an Nachvollziehbarkeit',
     ],
     illustration: 'office',
+    relatedStationId: 'freelance',
   },
 ];
 
