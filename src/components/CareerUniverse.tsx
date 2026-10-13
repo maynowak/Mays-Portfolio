@@ -9,6 +9,7 @@ import {
 } from '../data/career';
 import { useInView } from '../hooks/useInView';
 import { usePageActive } from '../hooks/usePageActive';
+import { usePrefersReducedMotion } from '../hooks/usePrefersReducedMotion';
 
 type ViewMode = 'weg' | 'schwerpunkte';
 
@@ -94,11 +95,14 @@ function NodeGlyph({ station }: { station: CareerStation }) {
 export default function CareerUniverse() {
   const { ref: viewRef, inView } = useInView<HTMLDivElement>();
   const pageActive = usePageActive();
+  const reducedMotion = usePrefersReducedMotion();
   const [mode, setMode] = useState<ViewMode>('weg');
   const [filter, setFilter] = useState<FocusId | 'alle'>('alle');
   const [openId, setOpenId] = useState<string | null>(null);
 
-  const running = inView && pageActive;
+  // Dekorative Bewegung nur, wenn die Ansicht sichtbar, der Tab aktiv und
+  // keine reduzierte Bewegung gewünscht ist.
+  const running = inView && pageActive && !reducedMotion;
 
   const visibleStations = useMemo<CareerStation[]>(() => {
     if (filter === 'alle') return careerStations;

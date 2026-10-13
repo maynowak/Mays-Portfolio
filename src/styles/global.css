@@ -2154,6 +2154,13 @@ code,
   font-size: 1.3rem;
 }
 
+.case-card__context {
+  font-family: var(--mono);
+  font-size: 0.76rem;
+  letter-spacing: 0.04em;
+  color: var(--accent-strong);
+}
+
 .case-card__scope {
   color: var(--ink-muted);
   font-size: 0.93rem;

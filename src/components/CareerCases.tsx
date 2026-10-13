@@ -84,6 +84,7 @@ export function CaseStudies() {
               <CaseIllustration kind={item.illustration} />
             </div>
             <h5 className="case-card__client">{item.client}</h5>
+            <p className="case-card__context">{item.context}</p>
             <p className="case-card__scope">{item.scope}</p>
             <ul className="case-card__list">
               {item.details.map((d) => (
