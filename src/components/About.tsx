@@ -1,9 +1,13 @@
+import { useState } from 'react';
 import { profile } from '../data/portfolio';
 import { useReveal } from '../hooks/useReveal';
+import CareerUniverse from './CareerUniverse';
+import { CaseStudies, RecruiterModal } from './CareerCases';
 
 export default function About() {
   const revealRef = useReveal<HTMLElement>();
   const { degree, experience } = profile;
+  const [recruiterOpen, setRecruiterOpen] = useState(false);
 
   return (
     <section id="ueber-mich" className="section" ref={revealRef} aria-labelledby="ueber-mich-title">
@@ -18,7 +22,7 @@ export default function About() {
         <div className="about__facts">
           <div className="fact">
             <strong>{degree}</strong>
-            <span>Abschluss Informatik</span>
+            <span>Hochschule Darmstadt</span>
           </div>
           <div className="fact">
             <strong>{experience}</strong>
@@ -39,6 +43,27 @@ export default function About() {
             </li>
           ))}
         </ul>
+
+        <div className="recruiter-bar">
+          <p className="recruiter-bar__text">
+            Für einen schnellen Überblick: Positionierung, Kompetenzschwerpunkte, die drei aktuellen
+            Projekte und die dokumentierten Arbeitsweisen auf einen Blick.
+          </p>
+          <button
+            type="button"
+            className="btn btn--primary"
+            onClick={() => setRecruiterOpen(true)}
+            aria-haspopup="dialog"
+          >
+            Profil auf einen Blick
+          </button>
+        </div>
+
+        <CareerUniverse />
+
+        <CaseStudies />
+
+        <RecruiterModal open={recruiterOpen} onClose={() => setRecruiterOpen(false)} />
       </div>
     </section>
   );
