@@ -748,6 +748,11 @@ code,
 .spec-stop-1 { stop-color: var(--spec-1); }
 .spec-stop-2 { stop-color: var(--spec-2); }
 
+/* Dekorative Daueranimation pausiert, wenn die Seite nicht sichtbar ist */
+.system-network--idle .network__flow {
+  animation-play-state: paused;
+}
+
 /* ---------- Projekte ---------- */
 
 .projects-grid {
@@ -1388,12 +1393,6 @@ code,
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
-}
-
-.footnote {
-  margin-top: 1.6rem;
-  font-size: 0.8rem;
-  color: var(--ink-faint);
 }
 
 /* ---------- Kontakt ---------- */

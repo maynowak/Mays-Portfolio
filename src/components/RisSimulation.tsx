@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { simulationSteps } from '../data/portfolio';
 import { usePrefersReducedMotion } from '../hooks/usePrefersReducedMotion';
+import { usePageActive } from '../hooks/usePageActive';
 
 const STEP_MS = 1900;
 
@@ -10,6 +11,7 @@ const STEP_MS = 1900;
  */
 export default function RisSimulation() {
   const reducedMotion = usePrefersReducedMotion();
+  const pageActive = usePageActive();
   const lastIndex = simulationSteps.length - 1;
 
   /** -1 = bereit/idle, 0..n-1 = aktiver Schritt */
@@ -17,14 +19,15 @@ export default function RisSimulation() {
   const [playing, setPlaying] = useState(false);
 
   useEffect(() => {
-    if (!playing || step >= lastIndex) return;
+    // Bei verborgenem Tab pausiert der automatische Ablauf.
+    if (!playing || !pageActive || step >= lastIndex) return;
     const timer = window.setTimeout(() => {
       const next = Math.min(step + 1, lastIndex);
       setStep(next);
       if (next >= lastIndex) setPlaying(false);
     }, STEP_MS);
     return () => window.clearTimeout(timer);
-  }, [playing, step, lastIndex]);
+  }, [playing, step, lastIndex, pageActive]);
 
   const start = () => {
     if (step < 0 || step >= lastIndex) setStep(0);

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { usePageActive } from '../hooks/usePageActive';
 
 type NodeId = 'cloud' | 'api' | 'agents' | 'core' | 'queue' | 'worker';
 type Shape = 'cube' | 'sphere' | 'poly' | 'orb' | 'blocks' | 'worker';
@@ -189,10 +190,11 @@ function NodeShape({ shape }: { shape: Shape }) {
  */
 export default function SystemNetwork() {
   const [activeId, setActiveId] = useState<NodeId | null>(null);
+  const pageActive = usePageActive();
   const active = activeId ? nodeById(activeId) : null;
 
   return (
-    <figure className="system-network">
+    <figure className={`system-network${pageActive ? '' : ' system-network--idle'}`}>
       <figcaption className="network-title">Interaktives Systemnetz</figcaption>
       <svg
         viewBox="0 0 660 490"
