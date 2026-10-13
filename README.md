@@ -74,11 +74,24 @@ Repository enthält `vercel.json`:
 ## Design
 
 - Farbschema: **dunkles Dunkelblau** (Standard) mit **leuchtendem Türkis** als Akzent;
-  optionales helles Schema über Schalter unten rechts einblendbar.
+  optionales helles Schema über Schalter in der Navigation.
 - Große Typografie (Georgia / system-ui), großzügige Abstände, feine
   technische Linien; ein dezentes Service-Raster liegt im Hintergrund.
-- Hero zeigt ein interaktives Systemnetz (SVG + CSS): Knoten reagieren auf
-  Maus, Tastatur und Touch.
+- Hero zeigt ein interaktives Systemnetz (SVG + CSS): große Glaskörper mit
+  Verläufen und Lichtkanten, türkise Verbindungen mit laufenden Datenimpulsen.
+  Knoten reagieren auf Maus, Tastatur und Touch.
+- Projektkarten zeigen eigene Bildwelten: vernetztes Agentensystem,
+  gläserne Workflow-Blöcke, abstrahierte Analyseoberfläche.
+- Dekorative Daueranimationen pausieren bei `prefers-reduced-motion`
+  und bei verborgenem Browser-Tab.
+
+## Inhalte und Quellen
+
+- Projekt-Reifegrade sind gegen die READMEs der Remote-Branches `main`
+  verifiziert (Stand 12.10.2026) und im UI entsprechend gekennzeichnet
+  (Implemented / Verified / Prepared / Historisch / Not deployed).
+- B.Sc. Informatik: vom Auftraggeber bestätigt.
+- Berufserfahrung: ohne Jahreszahl formuliert, da die Zahl noch offen ist.
 
 ## Barrierefreiheit
 

@@ -271,7 +271,10 @@ export default function SystemNetwork() {
             onKeyDown={(event) => {
               if (event.key === 'Enter' || event.key === ' ') {
                 event.preventDefault();
-                setActiveId((current) => (current === node.id ? null : node.id));
+                // Aktiviert den Knoten (wie bei einem echten Button-Enter).
+                // Der Fokus hat ihn bereits markiert — Enter darf ihn nicht
+                // wieder abschalten, sonst wäre er per Tastatur nicht erreichbar.
+                setActiveId(node.id);
               }
             }}
           >
