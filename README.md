@@ -82,8 +82,30 @@ Repository enthält `vercel.json`:
   Knoten reagieren auf Maus, Tastatur und Touch.
 - Projektkarten zeigen eigene Bildwelten: vernetztes Agentensystem,
   gläserne Workflow-Blöcke, abstrahierte Analyseoberfläche.
-- Dekorative Daueranimationen pausieren bei `prefers-reduced-motion`
-  und bei verborgenem Browser-Tab.
+- Dekorative Daueranimationen pausieren bei `prefers-reduced-motion`,
+  bei verborgenem Browser-Tab und außerhalb des sichtbaren Bereichs.
+
+## Career Universe
+
+Im Bereich „Über mich" verbindet eine interaktive Karriereansicht die
+Stationen des beruflichen Wegs mit heutigen Kompetenzen:
+
+- **Zwei Ansichten:** „Beruflicher Weg" (chronologische Zeitachse) und
+  „Technische Schwerpunkte" (Stationen nach Kompetenz gruppiert).
+- **Kompetenzfilter:** Java & Integration, Daten & Migration, DevOps,
+  Cloud & AI — passende Stationen werden hervorgehoben, andere bleiben
+  erkennbar (Dimmung, gestrichelte Kontur, Texthinweis).
+- **Detailpanel je Station** mit Projektumfeld, belegten Tätigkeiten,
+  Technologien und einer als redaktionell gekennzeichneten Einordnung.
+- **Drei Enterprise-Fallbeispiele** (Deutsche Bahn, BaFin, Deutscher Zoll)
+  mit ausdrücklich abstrakten Illustrationen.
+- **„Profil auf einen Blick":** kompakte Recruiter-Ansicht als Dialog mit
+  Fokusführung, Escape und Fokusrückgabe.
+- Mobilgeräte erhalten eine vertikale Timeline mit denselben Funktionen.
+
+Inhaltliche Grundlage: `May_Nowak_CV_Karrierehighlights_Portfolio_2026-10-13.pdf`.
+Offene Punkte (Abgleich von Vertragsbezeichnungen und Zeiträumen, Angaben zur
+Weiterbildung) sind in `docs/reports/` dokumentiert.
 
 ## Inhalte und Quellen
 

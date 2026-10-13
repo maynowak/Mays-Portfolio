@@ -131,10 +131,44 @@ Terraform checks ............... GRAY (not applicable — static web frontend,
   docs/reports/04-MAY-PORTFOLIO-LIGHT-MODE-PRESENCE-01-EXECUTION_LOG.md
 
 --------------------------------------------------------------------------------
+[2026-10-13] MAY-PORTFOLIO-CAREER-UNIVERSE-01 — Career Universe
+--------------------------------------------------------------------------------
+- Source: the file named in the brief (…_2026-10-13(2).pdf) does NOT exist.
+  Used instead ~/Downloads/May_Nowak_CV_Karrierehighlights_Portfolio_2026-10-13.pdf
+  (website content brief, 13.10.2026), read via `pdftotext -layout`. Confirms
+  B.Sc. Informatik, Hochschule Darmstadt, and the station list.
+- Delivered: "Über mich" now carries a Career Universe — glowing timeline with
+  glass nodes (different geometry per focus area), view switch (Beruflicher
+  Weg / Technische Schwerpunkte), competence filters (Alle, Java & Integration,
+  Daten & Migration, DevOps, Cloud & AI), accessible station detail panels,
+  three Enterprise case studies with abstract illustrations, and a
+  "Profil auf einen Blick" modal for recruiters. Mobile gets a vertical
+  timeline with identical functions.
+- Withheld on purpose: further-education dates/duration/certificate (not yet
+  consolidated per the brief), AWS/Terraform exams (goals, not passed), exact
+  contract/employer designations (to be reconciled), team sizes, budgets,
+  responsibility scope, availability, remote experience. Public wording stays
+  "Ausgewählte Projektpraxis" / "Projektumfeld" and "Langjährige Erfahrung".
+- Four real defects found and fixed while implementing: black node faces
+  (gradient only applied to the top face), data pulses offset by one viewBox
+  height (animateMotion adds to the element origin), missing "Zeus 2" (the
+  case `context` field was never rendered), and SMIL pulses ignoring
+  prefers-reduced-motion.
+- Own measurement bug corrected (footer gap measured across two different
+  scroll positions: 128 px at equal position, i.e. unchanged).
+- Checks: tsc / lint / build PASS, 74/74 career E2E PASS, 46/46 regression
+  E2E PASS, 0 pageerrors, all sampled text at least AA.
+- Full detail: docs/reports/05-CAREER-UNIVERSE-01-EXECUTION_LOG.md
+
+--------------------------------------------------------------------------------
 OPEN ITEMS
 --------------------------------------------------------------------------------
 - Years of professional experience: wording without a number until clarified.
+- Exact contract/employer designations and time ranges of earlier stations:
+  reconcile against original documents before publishing.
+- Further-education details (duration, period, certificate) not consolidated.
 - Vercel deployment status: not verifiable from this environment (no
-  credentials). Never reported as verified.
+  credentials). Never reported as verified. Known address for a live check:
+  https://mays-portfolio-six.vercel.app/
 
 ================================================================================
