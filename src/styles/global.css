@@ -44,6 +44,25 @@
   --badge-historical: #b7a6e0;
   /* Kontraststarker Label-Ton (Light Mode) */
   --accent-label: #2ee6d0;
+  /* Projektgrafiken (Karten): Dark-Werte — reproduzieren exakt den
+     bisherigen Dark-Mode-Look (Deckkraft steckt vollständig in den Werten). */
+  --cd-stroke-1: #2ee6d0;
+  --cd-stroke-soft: #2ee6d0;
+  --cd-stroke-strong: #2ee6d0;
+  --cd-a1: rgba(46, 230, 208, 0.34);
+  --cd-a2: rgba(46, 230, 208, 0.16);
+  --cd-a3: rgba(46, 230, 208, 0.22);
+  --cd-glass-a1: rgba(46, 230, 208, 0.34);
+  --cd-glass-a2: rgba(46, 230, 208, 0.05);
+  --cd-core-a1: rgba(46, 230, 208, 0.55);
+  --cd-core-a2: rgba(46, 230, 208, 0.08);
+  --cd-panel-a1: rgba(46, 230, 208, 0.26);
+  --cd-panel-a2: rgba(46, 230, 208, 0.06);
+  --cd-card-a1: rgba(46, 230, 208, 0.42);
+  --cd-card-a2: rgba(46, 230, 208, 0.06);
+  --cd-spec: #ffffff;
+  --cd-floor: rgba(46, 230, 208, 0.07);
+  --cd-node-depth: none;
   color-scheme: dark;
 }
 
@@ -63,18 +82,19 @@
   --grid-line: rgba(20, 60, 100, 0.08);
   --glow: rgba(10, 156, 140, 0.12);
   --glow-strong: rgba(10, 156, 140, 0.26);
-  /* Porzellanweiß mit dunkelblauen Kanten und klaren türkisen Glasformen */
-  --glass-1: rgba(120, 220, 230, 0.42);
-  --glass-1-strong: rgba(110, 210, 225, 0.55);
-  --glass-2: rgba(10, 140, 160, 0.1);
-  --glass-3: rgba(255, 255, 255, 0.02);
-  --spec-1: rgba(255, 255, 255, 0.95);
-  --spec-2: rgba(255, 255, 255, 0);
-  --shell: rgba(6, 80, 110, 0.62);
-  --wire: rgba(10, 110, 140, 0.42);
-  --rim: rgba(255, 255, 255, 0.9);
-  --edge: rgba(8, 120, 130, 0.45);
-  --glow-floor: rgba(10, 156, 140, 0.12);
+  /* Porzellanweiß mit kräftigen Petrol-Konturen und satten türkisen
+     Glasformen — weniger Transparenz, damit die Körper nicht verschwimmen */
+  --glass-1: rgba(86, 226, 214, 0.62);
+  --glass-1-strong: rgba(46, 214, 200, 0.8);
+  --glass-2: rgba(16, 166, 186, 0.42);
+  --glass-3: rgba(8, 108, 132, 0.38);
+  --spec-1: rgba(255, 255, 255, 0.96);
+  --spec-2: rgba(255, 255, 255, 0.12);
+  --shell: rgba(4, 104, 122, 0.95);
+  --wire: rgba(6, 128, 146, 0.72);
+  --rim: rgba(255, 255, 255, 0.95);
+  --edge: rgba(5, 116, 132, 0.62);
+  --glow-floor: rgba(10, 156, 140, 0.2);
   /* Sekundärtexte deutlich dunkler (WCAG AA) */
   --ink-muted: #3c5772;
   --ink-faint: #56708c;
@@ -85,6 +105,25 @@
   --badge-historical: #57408f;
   /* Kontraststarker Label-Ton: reines Türkis ist auf Weiß zu hell (WCAG AA) */
   --accent-label: #067a6d;
+  /* Projektgrafiken (Karten): Light-Werte — kräftige Petrol-Konturen,
+     satte Glasflächen und sichtbare Bodentiefe auf Porzellanweiß */
+  --cd-stroke-1: rgba(4, 92, 110, 0.95);
+  --cd-stroke-soft: rgba(8, 132, 148, 0.8);
+  --cd-stroke-strong: #03454f;
+  --cd-a1: rgba(96, 234, 214, 0.8);
+  --cd-a2: rgba(16, 168, 190, 0.52);
+  --cd-a3: rgba(9, 112, 134, 0.6);
+  --cd-glass-a1: rgba(96, 234, 214, 0.78);
+  --cd-glass-a2: rgba(9, 112, 134, 0.42);
+  --cd-core-a1: rgba(72, 226, 210, 0.9);
+  --cd-core-a2: rgba(7, 104, 128, 0.5);
+  --cd-panel-a1: rgba(96, 234, 214, 0.55);
+  --cd-panel-a2: rgba(9, 112, 134, 0.35);
+  --cd-card-a1: rgba(96, 234, 214, 0.72);
+  --cd-card-a2: rgba(16, 168, 190, 0.45);
+  --cd-spec: #ffffff;
+  --cd-floor: rgba(11, 150, 162, 0.2);
+  --cd-node-depth: drop-shadow(0 3px 7px rgba(6, 90, 110, 0.24));
   color-scheme: light;
 }
 
@@ -748,9 +787,56 @@ code,
 .spec-stop-1 { stop-color: var(--spec-1); }
 .spec-stop-2 { stop-color: var(--spec-2); }
 
+/* ---- Light Mode: Präsenz der Architekturformen ----
+   Kein pauschales Abdunkeln des SVG: gezielt werden Konturen,
+   Lichtkanten, Verbindungen und Datenimpulse verstärkt. */
+:root[data-theme='light'] .node__shell {
+  stroke-width: 1.7;
+}
+
+:root[data-theme='light'] .node__wire {
+  stroke-width: 1.05;
+  opacity: 0.95;
+}
+
+:root[data-theme='light'] .node__rim {
+  stroke-width: 3;
+  stroke-dasharray: 170 420;
+}
+
+:root[data-theme='light'] .network__edge {
+  stroke-width: 1.9;
+  opacity: 1;
+}
+
+:root[data-theme='light'] .network__orbit {
+  opacity: 0.85;
+}
+
+/* Plastizität: dezenter Schlagschatten unter den Körpern */
+:root[data-theme='light'] .network__node > g {
+  filter: drop-shadow(0 4px 9px rgba(6, 90, 110, 0.2));
+}
+
+:root[data-theme='light'] .network__node:hover > g,
+:root[data-theme='light'] .network__node:focus-visible > g,
+:root[data-theme='light'] .network__node--active > g {
+  filter: drop-shadow(0 6px 16px rgba(6, 90, 110, 0.32));
+}
+
+:root[data-theme='light'] .network__grid path {
+  opacity: 0.7;
+  stroke-width: 1;
+}
+
 /* Dekorative Daueranimation pausiert, wenn die Seite nicht sichtbar ist */
 .system-network--idle .network__flow {
   animation-play-state: paused;
+}
+
+/* Dezenter Schlagschatten für Plastizität der Karten-Grafiken (nur Light) */
+.cd-depth {
+  filter: var(--cd-node-depth, none);
 }
 
 /* ---------- Projekte ---------- */
@@ -797,11 +883,26 @@ code,
   transition: background 0.35s var(--ease);
 }
 
+/* Light Mode: leicht abgesetzte Glasfläche, damit die Grafik nicht
+   mit dem Porzellanweiß verschmilzt */
+:root[data-theme='light'] .project-card__media {
+  background:
+    radial-gradient(120% 95% at 50% 8%, rgba(255, 255, 255, 0.9), transparent 70%),
+    linear-gradient(180deg, rgba(13, 158, 168, 0.09), rgba(13, 158, 168, 0.16));
+}
+
 .project-card:hover .project-card__media,
 .project-card:focus-within .project-card__media {
   background:
     radial-gradient(130% 110% at 50% 0%, var(--glow-strong), transparent 66%),
     linear-gradient(180deg, transparent, var(--glow));
+}
+
+:root[data-theme='light'] .project-card:hover .project-card__media,
+:root[data-theme='light'] .project-card:focus-within .project-card__media {
+  background:
+    radial-gradient(120% 95% at 50% 8%, rgba(255, 255, 255, 0.95), transparent 72%),
+    linear-gradient(180deg, rgba(13, 158, 168, 0.14), rgba(13, 158, 168, 0.22));
 }
 
 .project-card__media svg {
