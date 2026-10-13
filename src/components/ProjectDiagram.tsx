@@ -1,106 +1,180 @@
 import type { DiagramKind } from '../data/portfolio';
 
-/** Abstrakte Linien-Visuals für die Projektkarten (dekorativ, aria-hidden). */
+/**
+ * Bildwelten der Projektkarten — rein dekorativ (aria-hidden).
+ * Glasflächen, türkise Kanten und räumliche Tiefe statt flacher Strichgrafik.
+ */
 
+/** Mays-RIS: vernetztes Agentensystem mit Kugeln, Kern und Datenfluss. */
 function NetworkDiagram() {
-  const cx = 210;
-  const cy = 104;
   const satellites = [
-    { x: 92, y: 58 },
-    { x: 330, y: 52 },
-    { x: 62, y: 150 },
-    { x: 210, y: 178 },
-    { x: 358, y: 146 },
-    { x: 150, y: 96 },
+    { x: 84, y: 52, r: 17 },
+    { x: 336, y: 44, r: 14 },
+    { x: 46, y: 138, r: 13 },
+    { x: 210, y: 172, r: 19 },
+    { x: 372, y: 146, r: 16 },
+    { x: 138, y: 104, r: 12 },
+    { x: 300, y: 106, r: 13 },
   ];
   return (
-    <svg viewBox="0 0 420 210" fill="none" stroke="currentColor" strokeWidth="1.1" aria-hidden="true" focusable="false">
-      <ellipse cx={cx} cy={cy} rx="168" ry="74" strokeDasharray="2 7" opacity="0.6" />
-      <ellipse cx={cx} cy={cy} rx="110" ry="104" strokeDasharray="2 7" opacity="0.35" transform="rotate(24 210 104)" />
+    <svg viewBox="0 0 420 200" fill="none" aria-hidden="true" focusable="false">
+      <defs>
+        <radialGradient id="card-glass-a" cx="36%" cy="30%" r="70%">
+          <stop offset="0%" stopColor="currentColor" stopOpacity="0.34" />
+          <stop offset="100%" stopColor="currentColor" stopOpacity="0.05" />
+        </radialGradient>
+        <radialGradient id="card-core-a" cx="36%" cy="30%" r="72%">
+          <stop offset="0%" stopColor="currentColor" stopOpacity="0.55" />
+          <stop offset="100%" stopColor="currentColor" stopOpacity="0.08" />
+        </radialGradient>
+      </defs>
+
+      {/* räumliche Ebene */}
+      <ellipse cx="210" cy="186" rx="196" ry="16" fill="currentColor" opacity="0.07" />
+      <path d="M14 186 L120 122 M70 186 L176 122 M126 186 L232 122 M182 186 L288 122 M238 186 L344 122 M294 186 L400 122"
+        stroke="currentColor" strokeWidth="0.8" opacity="0.28" />
+
+      {/* Bahnen */}
+      <ellipse cx="210" cy="104" rx="176" ry="70" stroke="currentColor" strokeWidth="1" strokeDasharray="2 8" opacity="0.45" />
+      <ellipse cx="210" cy="104" rx="120" ry="104" stroke="currentColor" strokeWidth="1" strokeDasharray="2 8" opacity="0.28" transform="rotate(22 210 104)" />
+
+      {/* Verbindungen zum Kern */}
       {satellites.map((s) => (
-        <line key={`l-${s.x}-${s.y}`} x1={cx} y1={cy} x2={s.x} y2={s.y} opacity="0.55" />
+        <line key={`l-${s.x}-${s.y}`} x1="210" y1="104" x2={s.x} y2={s.y} stroke="currentColor" strokeWidth="1.2" opacity="0.62" />
       ))}
+
+      {/* Satelliten als Glaskugeln */}
       {satellites.map((s) => (
         <g key={`s-${s.x}-${s.y}`}>
-          <circle cx={s.x} cy={s.y} r="14" />
-          <circle cx={s.x} cy={s.y} r="4" />
+          <circle cx={s.x} cy={s.y} r={s.r} fill="url(#card-glass-a)" />
+          <circle cx={s.x} cy={s.y} r={s.r} stroke="currentColor" strokeWidth="1.3" />
+          <ellipse cx={s.x} cy={s.y} rx={s.r} ry={s.r * 0.34} stroke="currentColor" strokeWidth="0.8" opacity="0.7" />
+          <circle cx={s.x - s.r * 0.34} cy={s.y - s.r * 0.36} r={s.r * 0.24} fill="#fff" opacity="0.5" />
         </g>
       ))}
-      <circle cx={cx} cy={cy} r="30" />
-      <circle cx={cx} cy={cy} r="20" strokeDasharray="2 5" />
-      <ellipse cx={cx} cy={cy} rx="30" ry="10" />
+
+      {/* Kern */}
+      <circle cx="210" cy="104" r="34" fill="url(#card-core-a)" />
+      <circle cx="210" cy="104" r="34" stroke="currentColor" strokeWidth="1.6" />
+      <ellipse cx="210" cy="104" rx="34" ry="11" stroke="currentColor" strokeWidth="1" opacity="0.8" />
+      <ellipse cx="210" cy="104" rx="11" ry="34" stroke="currentColor" strokeWidth="1" opacity="0.8" />
+      <circle cx="210" cy="104" r="4.5" fill="currentColor" />
     </svg>
   );
 }
 
+/** Mays Orders AWS: verbundene, gläserne Workflow-Blöcke über Rasterfläche. */
 function BlocksDiagram() {
-  const cube = (x: number, y: number, s: number) => {
-    const w = s;
-    const h = s * 0.5;
-    return (
-      <g key={`${x}-${y}`}>
-        <path d={`M${x} ${y - h} L${x + w} ${y} L${x} ${y + h} L${x - w} ${y} Z`} />
-        <path d={`M${x - w} ${y} L${x} ${y + h} L${x} ${y + h + s} L${x - w} ${y + s} Z`} opacity="0.65" />
-        <path d={`M${x} ${y + h} L${x + w} ${y} L${x + w} ${y + s} L${x} ${y + h + s} Z`} opacity="0.65" />
-      </g>
-    );
-  };
+  const cube = (x: number, y: number, s: number) => (
+    <g key={`${x}-${y}`}>
+      <path d={`M${x} ${y - s * 0.5} L${x + s} ${y} L${x} ${y + s * 0.5} L${x - s} ${y} Z`} fill="currentColor" opacity="0.34" />
+      <path d={`M${x - s} ${y} L${x} ${y + s * 0.5} L${x} ${y + s * 0.5 + s} L${x - s} ${y + s} Z`} fill="currentColor" opacity="0.16" />
+      <path d={`M${x} ${y + s * 0.5} L${x + s} ${y} L${x + s} ${y + s} L${x} ${y + s * 0.5 + s} Z`} fill="currentColor" opacity="0.22" />
+      <path d={`M${x} ${y - s * 0.5} L${x + s} ${y} L${x} ${y + s * 0.5} L${x - s} ${y} Z`} stroke="currentColor" strokeWidth="1.3" />
+      <path d={`M${x - s} ${y} L${x} ${y + s * 0.5} L${x} ${y + s * 0.5 + s} L${x - s} ${y + s} Z`} stroke="currentColor" strokeWidth="1.3" />
+      <path d={`M${x} ${y + s * 0.5} L${x + s} ${y} L${x + s} ${y + s} L${x} ${y + s * 0.5 + s} Z`} stroke="currentColor" strokeWidth="1.3" />
+    </g>
+  );
   return (
-    <svg viewBox="0 0 420 210" fill="none" stroke="currentColor" strokeWidth="1.1" aria-hidden="true" focusable="false">
-      {[-2, -1, 0, 1, 2].map((i) => (
-        <line key={`g1-${i}`} x1={60 + i * 60} y1={182} x2={210 + i * 60} y2={104} strokeDasharray="2 7" opacity="0.4" />
+    <svg viewBox="0 0 420 200" fill="none" aria-hidden="true" focusable="false">
+      <defs>
+        <radialGradient id="card-glass-b" cx="38%" cy="26%" r="70%">
+          <stop offset="0%" stopColor="currentColor" stopOpacity="0.4" />
+          <stop offset="100%" stopColor="currentColor" stopOpacity="0.06" />
+        </radialGradient>
+      </defs>
+
+      {/* Bodenraster */}
+      <ellipse cx="210" cy="186" rx="200" ry="14" fill="currentColor" opacity="0.06" />
+      {[-3, -2, -1, 0, 1, 2, 3].map((i) => (
+        <line key={`a-${i}`} x1={210 + i * 58} y1="186" x2={210 + i * 40} y2="126" stroke="currentColor" strokeWidth="0.8" opacity="0.3" />
       ))}
       {[-2, -1, 0, 1, 2].map((i) => (
-        <line key={`g2-${i}`} x1={210 + i * 60} y1={104} x2={360 + i * 60} y2={182} strokeDasharray="2 7" opacity="0.4" />
+        <line key={`b-${i}`} x1={60 + i * 50} y1="186" x2={210 + i * 24} y2="126" stroke="currentColor" strokeWidth="0.8" opacity="0.3" />
       ))}
-      <line x1="128" y1="122" x2="128" y2="76" opacity="0.55" />
-      <line x1="292" y1="122" x2="292" y2="76" opacity="0.55" />
-      <line x1="210" y1="96" x2="210" y2="40" opacity="0.55" />
-      {cube(128, 68, 26)}
-      {cube(292, 68, 26)}
-      {cube(210, 32, 30)}
-      {cube(210, 122, 26)}
-      {cube(46, 148, 20)}
-      {cube(374, 148, 20)}
+      {[0, 1, 2, 3, 4, 5].map((i) => (
+        <line key={`c-${i}`} x1={70 + i * 56} y1="170" x2={150 + i * 30} y2="130" stroke="currentColor" strokeWidth="0.7" strokeDasharray="3 6" opacity="0.4" />
+      ))}
+
+      {/* Verbindungen zwischen den Blöcken */}
+      <line x1="120" y1="104" x2="120" y2="62" stroke="currentColor" strokeWidth="1.3" opacity="0.7" />
+      <line x1="300" y1="104" x2="300" y2="62" stroke="currentColor" strokeWidth="1.3" opacity="0.7" />
+      <line x1="210" y1="66" x2="210" y2="34" stroke="currentColor" strokeWidth="1.3" opacity="0.7" />
+      <line x1="120" y1="62" x2="210" y2="34" stroke="currentColor" strokeWidth="1" strokeDasharray="4 6" opacity="0.55" />
+      <line x1="300" y1="62" x2="210" y2="34" stroke="currentColor" strokeWidth="1" strokeDasharray="4 6" opacity="0.55" />
+      <line x1="210" y1="142" x2="210" y2="164" stroke="currentColor" strokeWidth="1.3" opacity="0.7" />
+
+      {/* Workflow-Blöcke */}
+      {cube(210, 34, 30)}
+      {cube(120, 62, 24)}
+      {cube(300, 62, 24)}
+      {cube(210, 118, 26)}
+      {cube(58, 150, 18)}
+      {cube(362, 150, 18)}
+      <circle cx="210" cy="34" r="4" fill="#fff" opacity="0.55" />
     </svg>
   );
 }
 
+/** May's Job Matcher: abstrahierte, hochwertige Analyseoberfläche. */
 function PanelDiagram() {
-  const rows = [96, 114, 132, 150];
+  const rows = [104, 124, 144];
   return (
-    <svg viewBox="0 0 420 210" fill="none" stroke="currentColor" strokeWidth="1.1" aria-hidden="true" focusable="false">
-      {[52, 72, 92, 112, 132, 152].map((y, i) => (
+    <svg viewBox="0 0 420 200" fill="none" aria-hidden="true" focusable="false">
+      <defs>
+        <linearGradient id="card-panel-face" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stopColor="currentColor" stopOpacity="0.26" />
+          <stop offset="100%" stopColor="currentColor" stopOpacity="0.06" />
+        </linearGradient>
+        <radialGradient id="card-glass-c" cx="30%" cy="26%" r="72%">
+          <stop offset="0%" stopColor="currentColor" stopOpacity="0.42" />
+          <stop offset="100%" stopColor="currentColor" stopOpacity="0.06" />
+        </radialGradient>
+      </defs>
+
+      {/* Datenströme von links */}
+      {[40, 56, 72, 88, 104, 120].map((y, i) => (
         <path
           key={`w-${y}`}
-          d={`M14 ${y} C 52 ${y - 14 - i * 2}, 72 ${y + 12}, 108 ${y - 6}`}
-          opacity="0.45"
-          strokeDasharray="1.5 5"
+          d={`M8 ${y} C 46 ${y - 16 - i * 2}, 66 ${y + 14}, 104 ${y - 8}`}
+          stroke="currentColor"
+          strokeWidth="1.1"
+          strokeDasharray="2 6"
+          opacity="0.5"
         />
       ))}
-      <line x1="108" y1="40" x2="108" y2="172" opacity="0.6" />
-      <rect x="128" y="42" width="256" height="128" rx="10" />
-      <line x1="128" y1="64" x2="384" y2="64" opacity="0.7" />
-      <circle cx="142" cy="53" r="3" />
-      <circle cx="154" cy="53" r="3" opacity="0.6" />
-      <circle cx="166" cy="53" r="3" opacity="0.35" />
+      <circle cx="104" cy="100" r="3" fill="currentColor" opacity="0.7" />
+
+      {/* Glasfläche der Oberfläche */}
+      <rect x="104" y="26" width="300" height="150" rx="14" fill="url(#card-panel-face)" />
+      <rect x="104" y="26" width="300" height="150" rx="14" stroke="currentColor" strokeWidth="1.4" />
+      <line x1="104" y1="50" x2="404" y2="50" stroke="currentColor" strokeWidth="1.2" opacity="0.7" />
+      <circle cx="120" cy="38" r="3.4" fill="currentColor" opacity="0.85" />
+      <circle cx="132" cy="38" r="3.4" fill="currentColor" opacity="0.5" />
+      <circle cx="144" cy="38" r="3.4" fill="currentColor" opacity="0.28" />
+      <line x1="330" y1="38" x2="388" y2="38" stroke="currentColor" strokeWidth="1.2" opacity="0.45" />
+
+      {/* Trefferliste */}
       {rows.map((y, i) => (
         <g key={`r-${y}`}>
-          <circle cx="146" cy={y + 5} r="3.4" opacity={i < 2 ? 1 : 0.5} />
-          <line x1="158" y1={y} x2={158 + 66 - i * 9} y2={y} opacity="0.85" />
-          <line x1="158" y1={y + 9} x2={158 + 44 - i * 6} y2={y + 9} opacity="0.45" />
+          <circle cx="124" cy={y - 4} r="4" fill="currentColor" opacity={i === 0 ? 0.95 : 0.5} />
+          <line x1="138" y1={y - 8} x2={138 + 88 - i * 12} y2={y - 8} stroke="currentColor" strokeWidth="1.6" opacity="0.85" />
+          <line x1="138" y1={y} x2={138 + 56 - i * 8} y2={y} stroke="currentColor" strokeWidth="1.2" opacity="0.45" />
         </g>
       ))}
-      <rect x="252" y="80" width="112" height="90" rx="8" opacity="0.9" />
-      <circle cx="268" cy="97" r="6" />
-      <circle cx="268" cy="122" r="6" opacity="0.65" />
-      <circle cx="268" cy="147" r="6" opacity="0.4" />
-      <line x1="284" y1="94" x2="350" y2="94" opacity="0.85" />
-      <line x1="284" y1="101" x2="334" y2="101" opacity="0.45" />
-      <line x1="284" y1="119" x2="342" y2="119" opacity="0.65" />
-      <line x1="284" y1="126" x2="328" y2="126" opacity="0.4" />
-      <line x1="284" y1="144" x2="338" y2="144" opacity="0.45" />
-      <line x1="284" y1="151" x2="322" y2="151" opacity="0.3" />
+
+      {/* Bewertungs-Karte mit Score */}
+      <rect x="256" y="62" width="132" height="102" rx="11" fill="url(#card-glass-c)" stroke="currentColor" strokeWidth="1.3" />
+      <circle cx="286" cy="92" r="17" fill="currentColor" opacity="0.22" stroke="currentColor" strokeWidth="1.3" />
+      <circle cx="286" cy="92" r="9" fill="currentColor" opacity="0.85" />
+      <line x1="312" y1="84" x2="374" y2="84" stroke="currentColor" strokeWidth="1.6" opacity="0.85" />
+      <line x1="312" y1="92" x2="360" y2="92" stroke="currentColor" strokeWidth="1.2" opacity="0.5" />
+      <line x1="312" y1="100" x2="368" y2="100" stroke="currentColor" strokeWidth="1.2" opacity="0.35" />
+      {[120, 134, 148].map((y, i) => (
+        <g key={`b-${y}`}>
+          <rect x="268" y={y} width={96 - i * 16} height="6" rx="3" fill="currentColor" opacity={0.5 - i * 0.14} />
+        </g>
+      ))}
     </svg>
   );
 }
