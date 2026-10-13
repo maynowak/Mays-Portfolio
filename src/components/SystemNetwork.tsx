@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 type NodeId = 'cloud' | 'api' | 'agents' | 'core' | 'queue' | 'worker';
-type Shape = 'cube' | 'circle' | 'hexa' | 'orb' | 'sqs' | 'lambda';
+type Shape = 'cube' | 'sphere' | 'poly' | 'orb' | 'blocks' | 'worker';
 
 interface NetNode {
   id: NodeId;
@@ -10,54 +10,56 @@ interface NetNode {
   x: number;
   y: number;
   shape: Shape;
-  radius: number;
+  /** Radius für die Kanten-Anbindung (Abstand zum Knotenmittelpunkt). */
+  r: number;
   labelX: number;
   labelY: number;
   labelAnchor: 'start' | 'middle' | 'end';
 }
 
+/** Knoten bewusst groß: Glaskugeln und Körper mit Lichtkanten. */
 const NODES: NetNode[] = [
+  {
+    id: 'core',
+    label: 'Core',
+    desc: 'Orchestrierungs-Kern: verbindet API, Agents, Queue und Worker.',
+    x: 332, y: 244, shape: 'orb', r: 86,
+    labelX: 332, labelY: 372, labelAnchor: 'middle',
+  },
   {
     id: 'cloud',
     label: 'Cloud',
     desc: 'Cloud-Plattform: serverlose Bausteine statt Serverbetrieb.',
-    x: 322, y: 78, shape: 'cube', radius: 40,
-    labelX: 378, labelY: 82, labelAnchor: 'start',
+    x: 336, y: 72, shape: 'cube', r: 52,
+    labelX: 392, labelY: 78, labelAnchor: 'start',
   },
   {
     id: 'api',
     label: 'API',
     desc: 'Geschützte Schnittstellen (JWT) — der Eingang jedes Auftrags.',
-    x: 128, y: 158, shape: 'circle', radius: 34,
-    labelX: 84, labelY: 162, labelAnchor: 'end',
-  },
-  {
-    id: 'core',
-    label: 'Core',
-    desc: 'Orchestrierungs-Kern: verbindet API, Agents, Queue und Worker.',
-    x: 312, y: 236, shape: 'orb', radius: 62,
-    labelX: 312, labelY: 330, labelAnchor: 'middle',
+    x: 120, y: 166, shape: 'sphere', r: 42,
+    labelX: 66, labelY: 172, labelAnchor: 'end',
   },
   {
     id: 'agents',
     label: 'Agents',
     desc: 'Agentic Systems: spezialisierte Einheiten mit klarer Aufgabe.',
-    x: 508, y: 208, shape: 'hexa', radius: 38,
-    labelX: 556, labelY: 212, labelAnchor: 'start',
+    x: 536, y: 212, shape: 'poly', r: 52,
+    labelX: 588, labelY: 216, labelAnchor: 'start',
   },
   {
     id: 'queue',
     label: 'Queue',
     desc: 'Asynchrone Entkopplung: Aufträge warten verlässlich in der Queue.',
-    x: 158, y: 372, shape: 'sqs', radius: 42,
-    labelX: 158, labelY: 432, labelAnchor: 'middle',
+    x: 146, y: 386, shape: 'blocks', r: 52,
+    labelX: 146, labelY: 452, labelAnchor: 'middle',
   },
   {
     id: 'worker',
     label: 'Worker',
     desc: 'Worker: nehmen Work Items entgegen und führen sie nachvollziehbar aus.',
-    x: 406, y: 384, shape: 'lambda', radius: 36,
-    labelX: 406, labelY: 440, labelAnchor: 'middle',
+    x: 430, y: 392, shape: 'worker', r: 42,
+    labelX: 430, labelY: 458, labelAnchor: 'middle',
   },
 ];
 
@@ -79,7 +81,7 @@ const EDGES: Edge[] = [
   { a: 'queue', b: 'worker' },
 ];
 
-/** Kanten, auf denen ein sichtbarer Datenfluss läuft. */
+/** Kanten mit laufendem Datenimpuls — ruhig, aber sichtbar. */
 const FLOW_EDGES: ReadonlyArray<readonly [NodeId, NodeId]> = [
   ['api', 'core'],
   ['core', 'queue'],
@@ -98,71 +100,92 @@ function edgePath(a: NetNode, b: NetNode, bend: number): string {
   const dx = b.x - a.x;
   const dy = b.y - a.y;
   const len = Math.hypot(dx, dy) || 1;
-  const sx = a.x + (dx / len) * a.radius;
-  const sy = a.y + (dy / len) * a.radius;
-  const ex = b.x - (dx / len) * b.radius;
-  const ey = b.y - (dy / len) * b.radius;
+  const sx = a.x + (dx / len) * a.r;
+  const sy = a.y + (dy / len) * a.r;
+  const ex = b.x - (dx / len) * b.r;
+  const ey = b.y - (dy / len) * b.r;
   const mx = (sx + ex) / 2 - (dy / len) * bend;
   const my = (sy + ey) / 2 + (dx / len) * bend;
   return `M ${sx.toFixed(1)} ${sy.toFixed(1)} Q ${mx.toFixed(1)} ${my.toFixed(1)} ${ex.toFixed(1)} ${ey.toFixed(1)}`;
 }
 
+/** Glaskörper: Verlaufsfläche + Lichtkante + inneres Detailgeflecht. */
 function NodeShape({ shape }: { shape: Shape }) {
   switch (shape) {
-    case 'cube':
-      return (
-        <>
-          <path className="node__shape" d="M0 -26 L22.5 -13 L0 0 L-22.5 -13 Z" />
-          <path className="node__detail" d="M-22.5 -13 L0 0 L0 26 L-22.5 13 Z" />
-          <path className="node__detail" d="M0 0 L22.5 -13 L22.5 13 L0 26 Z" />
-        </>
-      );
-    case 'circle':
-      return (
-        <>
-          <circle className="node__shape" r="30" />
-          <circle className="node__detail" r="14" />
-          <path className="node__detail" d="M0 -30 V-38 M0 30 V38 M-30 0 H-38 M30 0 H38" />
-        </>
-      );
-    case 'hexa':
-      return (
-        <>
-          <path className="node__shape" d="M34 0 L17 29.4 L-17 29.4 L-34 0 L-17 -29.4 L17 -29.4 Z" />
-          <path className="node__detail" d="M34 0 L-17 -29.4 L-17 29.4 Z M-34 0 L17 -29.4 L17 29.4 Z" />
-        </>
-      );
     case 'orb':
       return (
         <>
-          <circle className="node__shape" r="56" />
-          <circle className="node__detail" r="40" strokeDasharray="2 6" />
-          <ellipse className="node__detail" rx="56" ry="18" />
-          <ellipse className="node__detail" rx="18" ry="56" />
+          <circle className="node__glass" r="80" />
+          <circle className="node__shell" r="80" />
+          <circle className="node__rim" r="80" />
+          <circle className="node__wire" r="58" strokeDasharray="2 7" />
+          <ellipse className="node__wire" rx="80" ry="26" />
+          <ellipse className="node__wire" rx="26" ry="80" />
+          <circle className="node__spec" cx="-26" cy="-32" r="13" />
         </>
       );
-    case 'sqs':
+    case 'sphere':
       return (
         <>
-          <rect className="node__shape" x="-38" y="-15" width="24" height="30" rx="5" />
-          <rect className="node__shape" x="-12" y="-15" width="24" height="30" rx="5" />
-          <rect className="node__shape" x="14" y="-15" width="24" height="30" rx="5" />
-          <path className="node__detail" d="M-26 -3 v6 M0 -3 v6 M26 -3 v6" />
+          <circle className="node__glass" r="38" />
+          <circle className="node__shell" r="38" />
+          <circle className="node__rim" r="38" />
+          <ellipse className="node__wire" rx="38" ry="13" />
+          <circle className="node__spec" cx="-12" cy="-15" r="7" />
         </>
       );
-    case 'lambda':
+    case 'worker':
       return (
         <>
-          <circle className="node__shape" r="30" />
-          <path className="node__detail" d="M-9 -13 L3 6 L9 -13 M-3 -1 L-9 13" />
+          <circle className="node__glass" r="36" />
+          <circle className="node__shell" r="36" />
+          <circle className="node__rim" r="36" />
+          <path className="node__wire" d="M-11 -15 L4 6 L11 -15 M-3 -1 L-11 15" />
+          <circle className="node__spec" cx="-12" cy="-14" r="6" />
+        </>
+      );
+    case 'poly':
+      return (
+        <>
+          <path className="node__glass" d="M48 0 L24 41.6 L-24 41.6 L-48 0 L-24 -41.6 L24 -41.6 Z" />
+          <path className="node__shell" d="M48 0 L24 41.6 L-24 41.6 L-48 0 L-24 -41.6 L24 -41.6 Z" />
+          <path
+            className="node__wire"
+            d="M48 0 L-24 -41.6 L-24 41.6 Z M-48 0 L24 -41.6 L24 41.6 Z M-24 -41.6 L24 -41.6 M-24 41.6 L24 41.6"
+          />
+          <circle className="node__node" cx="0" cy="0" r="4" />
+        </>
+      );
+    case 'cube':
+      return (
+        <>
+          <path className="node__glass" d="M0 -38 L33 -19 L0 0 L-33 -19 Z" />
+          <path className="node__glass" d="M-33 -19 L0 0 L0 38 L-33 19 Z" />
+          <path className="node__glass" d="M0 0 L33 -19 L33 19 L0 38 Z" />
+          <path className="node__shell" d="M0 -38 L33 -19 L0 0 L-33 -19 Z" />
+          <path className="node__shell" d="M-33 -19 L0 0 L0 38 L-33 19 Z" />
+          <path className="node__shell" d="M0 0 L33 -19 L33 19 L0 38 Z" />
+          <path className="node__wire" d="M-33 -19 L-33 19 M0 0 L33 -19" />
+        </>
+      );
+    case 'blocks':
+      return (
+        <>
+          <rect className="node__glass" x="-52" y="-21" width="32" height="42" rx="7" />
+          <rect className="node__glass" x="-16" y="-21" width="32" height="42" rx="7" />
+          <rect className="node__glass" x="20" y="-21" width="32" height="42" rx="7" />
+          <rect className="node__shell" x="-52" y="-21" width="32" height="42" rx="7" />
+          <rect className="node__shell" x="-16" y="-21" width="32" height="42" rx="7" />
+          <rect className="node__shell" x="20" y="-21" width="32" height="42" rx="7" />
+          <path className="node__wire" d="M-36 -6 v12 M0 -6 v12 M36 -6 v12" />
         </>
       );
   }
 }
 
 /**
- * Interaktives Systemnetz im Hero. Knoten reagieren auf Hover, Fokus
- * (Tastatur) und Tap (Touch) — die Beschreibung steht im Caption darunter.
+ * Interaktives Systemnetz im Hero: große Glaskörper, türkise Verbindungen
+ * mit Datenimpulsen. Knoten reagieren auf Hover, Tastaturfokus und Touch.
  */
 export default function SystemNetwork() {
   const [activeId, setActiveId] = useState<NodeId | null>(null);
@@ -172,16 +195,45 @@ export default function SystemNetwork() {
     <figure className="system-network">
       <figcaption className="network-title">Interaktives Systemnetz</figcaption>
       <svg
-        viewBox="0 0 640 470"
+        viewBox="0 0 660 490"
         role="group"
         aria-label="Systemnetz: sechs Knoten — Cloud, API, Core, Agents, Queue und Worker"
       >
-        <ellipse className="network__orbit" cx="318" cy="244" rx="272" ry="148" />
-        <ellipse className="network__orbit" cx="318" cy="244" rx="272" ry="60" transform="rotate(-14 318 244)" />
+        <defs>
+          <radialGradient id="mn-glass" cx="38%" cy="30%" r="72%">
+            <stop className="glass-stop-1" offset="0%" />
+            <stop className="glass-stop-2" offset="55%" />
+            <stop className="glass-stop-3" offset="100%" />
+          </radialGradient>
+          <radialGradient id="mn-glass-deep" cx="35%" cy="26%" r="78%">
+            <stop className="glass-stop-4" offset="0%" />
+            <stop className="glass-stop-2" offset="60%" />
+            <stop className="glass-stop-3" offset="100%" />
+          </radialGradient>
+          <radialGradient id="mn-spec" cx="50%" cy="50%" r="50%">
+            <stop className="spec-stop-1" offset="0%" />
+            <stop className="spec-stop-2" offset="100%" />
+          </radialGradient>
+        </defs>
+
+        {/* Bodenebene: verleiht dem Bild räumliche Tiefe */}
+        <ellipse className="network__floor" cx="330" cy="470" rx="300" ry="34" />
+        <ellipse className="network__floor network__floor--mid" cx="330" cy="462" rx="215" ry="24" />
+        <g className="network__grid" aria-hidden="true">
+          {[0, 1, 2, 3, 4].map((i) => (
+            <path key={`gl-${i}`} d={`M${30 + i * 60} 470 L${160 + i * 60} 402`} />
+          ))}
+          {[0, 1, 2, 3, 4, 5, 6].map((i) => (
+            <path key={`gr-${i}`} d={`M${120 + i * 42} 470 L${120 + i * 42} 434`} />
+          ))}
+        </g>
+
+        <ellipse className="network__orbit" cx="330" cy="248" rx="286" ry="152" />
+        <ellipse className="network__orbit" cx="330" cy="248" rx="286" ry="64" transform="rotate(-12 330 248)" />
 
         <g aria-hidden="true">
           {EDGES.map((edge, i) => {
-            const d = edgePath(nodeById(edge.a), nodeById(edge.b), i % 2 === 0 ? 22 : -22);
+            const d = edgePath(nodeById(edge.a), nodeById(edge.b), i % 2 === 0 ? 26 : -26);
             const isActive = activeId === edge.a || activeId === edge.b;
             return (
               <path
@@ -195,7 +247,7 @@ export default function SystemNetwork() {
             <path
               key={`flow-${a}-${b}`}
               className="network__flow"
-              d={edgePath(nodeById(a), nodeById(b), i % 2 === 0 ? 22 : -22)}
+              d={edgePath(nodeById(a), nodeById(b), i % 2 === 0 ? 26 : -26)}
             />
           ))}
         </g>
