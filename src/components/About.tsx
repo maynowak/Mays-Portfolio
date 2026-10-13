@@ -3,7 +3,7 @@ import { useReveal } from '../hooks/useReveal';
 
 export default function About() {
   const revealRef = useReveal<HTMLElement>();
-  const { pendingConfirmation } = profile;
+  const { degree, experience } = profile;
 
   return (
     <section id="ueber-mich" className="section" ref={revealRef} aria-labelledby="ueber-mich-title">
@@ -17,12 +17,12 @@ export default function About() {
 
         <div className="about__facts">
           <div className="fact">
-            <strong>{pendingConfirmation.experience}*</strong>
-            <span>Enterprise-Software, Systemintegration, Cloud</span>
+            <strong>{degree}</strong>
+            <span>Abschluss Informatik</span>
           </div>
           <div className="fact">
-            <strong>{pendingConfirmation.degree}*</strong>
-            <span>Informatik als Fundament</span>
+            <strong>{experience}</strong>
+            <span>Enterprise-Software, Systemintegration, Cloud</span>
           </div>
         </div>
 
@@ -39,8 +39,6 @@ export default function About() {
             </li>
           ))}
         </ul>
-
-        <p className="footnote">* {pendingConfirmation.note}</p>
       </div>
     </section>
   );

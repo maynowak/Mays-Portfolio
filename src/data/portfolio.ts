@@ -5,9 +5,11 @@
  * - Projektinhalte und Reifegrade wurden am 12.10.2026 direkt aus den
  *   README-Dateien der Remote-Branches `main` der jeweiligen GitHub-Repos
  *   verifiziert (siehe `source` je Projekt).
- * - B.Sc. Informatik und „mehr als 17 Jahre Enterprise-Erfahrung" stammen aus
- *   dem Auftrags-Briefing; eine separate Briefing-Datei ist nicht verfügbar.
- *   Diese Angaben sind mit `pendingConfirmation: true` markiert.
+ * - B.Sc. Informatik: vom Auftraggeber bestätigt.
+ * - Berufserfahrung: Jahreszahl intern noch offen. Nach außen wird bewusst
+ *   ohne Zahl formuliert („Langjährige Erfahrung in Enterprise-Softwareent-
+ *   wicklung und Systemintegration"). Interne Notiz: Länge der Erfahrung
+ *   wurde nicht abschließend geklärt — siehe docs/reports/.
  */
 
 export type MaturityStatus =
@@ -62,12 +64,9 @@ export interface Profile {
   intro: string;
   focusAreas: string[];
   competence: string[];
-  /** Aus dem Auftrags-Briefing – separate Briefing-Datei nicht verfügbar. */
-  pendingConfirmation: {
-    degree: string;
-    experience: string;
-    note: string;
-  };
+  /** B.Sc. Informatik bestätigt durch Auftraggeber. */
+  degree: string;
+  experience: string;
   about: string[];
   github: string;
 }
@@ -94,13 +93,10 @@ export const profile: Profile = {
     'Agenten-Orchestrierung: Registry, Discovery, Eligibility, Routing',
     'KI-Integration mit Provider-Fallback und Kostenkontrolle',
   ],
-  pendingConfirmation: {
-    degree: 'B.Sc. Informatik',
-    experience: 'mehr als 17 Jahre Enterprise-Erfahrung',
-    note: 'Angaben aus dem Auftrags-Briefing – Bestätigung ausstehend.',
-  },
+  degree: 'B.Sc. Informatik',
+  experience: 'Langjährige Erfahrung in Enterprise-Softwareentwicklung und Systemintegration',
   about: [
-    'Ich komme aus der Enterprise-Software und bin über Systemintegration zu Cloud- und AI-Engineering gekommen. Was sich über die Jahre nicht geändert hat: Ich baue Systeme so, dass ihr Zustand, ihre Grenzen und ihre Nachweise jederzeit offenliegen.',
+    'Ich entwerfe und baue Systeme, die man verstehen, prüfen und betreiben kann: von serverlosen AWS-Backends über Infrastructure as Code bis zu Agenten-Laufzeiten und KI-Produkten.',
     'Meine Projekte sprechen dabei für sich – inklusive ehrlicher Reifegrade: Was implementiert, verifiziert oder nur vorbereitet ist, steht im Repository. Historische Tests werden nicht als aktueller Betrieb dargestellt.',
   ],
   github: 'https://github.com/maynowak',
