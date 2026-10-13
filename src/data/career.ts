@@ -102,7 +102,7 @@ export const careerStations: CareerStation[] = [
     x: 9,
     side: 'above',
     sourceNote:
-      'Brief nennt die Projektumfelder; Teamgrößen und Ergebnisse erst nach zusätzlicher Bestätigung. Das BaFin-Projekt (03/2012–09/2012) ist zeitlich und inhaltlich dieser Phase zugeordnet und wird als Fallbeispiel geführt, nicht als eigene Station.',
+      'Brief nennt die Projektumfelder; Teamgrößen und Ergebnisse erst nach zusätzlicher Bestätigung. Das BaFin-Vorhaben (03/2012–09/2012) ist zeitlich und inhaltlich dieser Phase zugeordnet und wird als Fallbeispiel geführt, nicht als eigene Station.',
   },
   {
     id: 'gh-inchorus',
