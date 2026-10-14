@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { CareerStation, FocusId } from '../data/career';
 import {
   careerIntro,
@@ -100,6 +100,79 @@ export default function CareerUniverse() {
   const [filter, setFilter] = useState<FocusId | 'alle'>('alle');
   const [openId, setOpenId] = useState<string | null>(null);
 
+  // ---- Navigation zwischen Knoten und Detailpanel ----
+  /** 'open' | 'close' — wird nach dem Rendern genau einmal abgearbeitet. */
+  const pendingActionRef = useRef<'open' | 'close' | null>(null);
+  /** Das tatsächlich auslösende Element (Knoten oder Chip). */
+  const triggerElRef = useRef<HTMLElement | null>(null);
+  const detailTitleRef = useRef<HTMLHeadingElement | null>(null);
+  const universeTitleRef = useRef<HTMLHeadingElement | null>(null);
+
+  /**
+   * Scrollt mit Sticky-Abstand zur Navigation. Die Nav-Höhe wird live
+   * gemessen, nicht hardkodiert. Bei reduzierter Bewegung wird sofort
+   * gescrollt, sonst sanft.
+   */
+  const scrollToWithNavOffset = useCallback(
+    (target: HTMLElement) => {
+      const nav = document.querySelector<HTMLElement>('.nav');
+      const navHeight = nav ? nav.offsetHeight : 72;
+      const top = target.getBoundingClientRect().top + window.scrollY - navHeight - 16;
+      window.scrollTo({
+        top: Math.max(top, 0),
+        behavior: reducedMotion ? 'auto' : 'smooth',
+      });
+    },
+    [reducedMotion],
+  );
+
+  const openStationById = (id: string, trigger: HTMLElement) => {
+    // Referenz auf das tatsächlich auslösende Element — nicht auf eine ID,
+    // denn in der Kompetenzansicht kann dieselbe Station in mehreren
+    // Gruppen erscheinen und der Rücksprung muss zum echten Auslöser führen.
+    triggerElRef.current = trigger;
+    pendingActionRef.current = 'open';
+    setOpenId(id);
+  };
+
+  const closeStation = () => {
+    pendingActionRef.current = 'close';
+    setOpenId(null);
+  };
+
+  // Erst ausführen, wenn das Panel gerendert (bzw. entfernt) ist —
+  // ein rAF pro Aktion statt einer Timeout-Kette.
+  useEffect(() => {
+    const action = pendingActionRef.current;
+    if (!action) return;
+    pendingActionRef.current = null;
+
+    const frame = requestAnimationFrame(() => {
+      if (action === 'open') {
+        const title = detailTitleRef.current;
+        if (title) {
+          scrollToWithNavOffset(title);
+          // preventScroll: kein zweiter Sprung durch die Fokussetzung.
+          title.focus({ preventScroll: true });
+        }
+        return;
+      }
+
+      if (action === 'close') {
+        // Auslösendes Element noch im DOM? Sonst (z. B. nach einem
+        // Ansichtswechsel) zurück zur Überschrift der Karriereansicht.
+        const trigger = triggerElRef.current;
+        const target = trigger && trigger.isConnected ? trigger : universeTitleRef.current;
+        if (target) {
+          scrollToWithNavOffset(target);
+          target.focus({ preventScroll: true });
+        }
+      }
+    });
+
+    return () => cancelAnimationFrame(frame);
+  }, [openId, reducedMotion, scrollToWithNavOffset]);
+
   // Dekorative Bewegung nur, wenn die Ansicht sichtbar, der Tab aktiv und
   // keine reduzierte Bewegung gewünscht ist.
   const running = inView && pageActive && !reducedMotion;
@@ -133,7 +206,9 @@ export default function CareerUniverse() {
       <header className="career-universe__head">
         <div>
           <p className="eyebrow">Career Universe</p>
-          <h3 className="career-universe__title">{careerTitle}</h3>
+          <h3 className="career-universe__title" ref={universeTitleRef} tabIndex={-1}>
+            {careerTitle}
+          </h3>
           <p className="career-universe__intro">{careerIntro}</p>
         </div>
 
@@ -248,7 +323,10 @@ export default function CareerUniverse() {
                     className="cu-node"
                     aria-expanded={isOpen}
                     aria-controls="cu-station-detail"
-                    onClick={() => setOpenId(isOpen ? null : station.id)}
+                    data-cu-trigger={station.id}
+                    onClick={(event) =>
+                      isOpen ? closeStation() : openStationById(station.id, event.currentTarget)
+                    }
                   >
                     <span className="cu-node__glyph">
                       <NodeGlyph station={station} />
@@ -284,7 +362,10 @@ export default function CareerUniverse() {
                           className={`cu-chip${isOpen ? ' cu-chip--open' : ''}`}
                           aria-expanded={isOpen}
                           aria-controls="cu-station-detail"
-                          onClick={() => setOpenId(isOpen ? null : station.id)}
+                          data-cu-trigger={station.id}
+                          onClick={(event) =>
+                            isOpen ? closeStation() : openStationById(station.id, event.currentTarget)
+                          }
                         >
                           <span className="cu-chip__period">{station.period}</span>
                           <span className="cu-chip__title">{station.title}</span>
@@ -311,16 +392,23 @@ export default function CareerUniverse() {
       )}
 
       {openStation && (
-        <div id="cu-station-detail" className="cu-detail" role="region" aria-label={`Station: ${openStation.title}`}>
+        <div
+          id="cu-station-detail"
+          className="cu-detail"
+          role="region"
+          aria-labelledby="cu-detail-title"
+        >
           <div className="cu-detail__head">
             <div>
               <p className="cu-detail__period">{openStation.period}</p>
-              <h4 className="cu-detail__title">{openStation.title}</h4>
+              <h4 className="cu-detail__title" id="cu-detail-title" ref={detailTitleRef} tabIndex={-1}>
+                {openStation.title}
+              </h4>
             </div>
             <button
               type="button"
               className="cu-detail__close"
-              onClick={() => setOpenId(null)}
+              onClick={closeStation}
               aria-label="Station schließen"
             >
               Schließen

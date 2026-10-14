@@ -188,6 +188,36 @@ Terraform checks ............... GRAY (not applicable — static web frontend,
   AWS-/Terraform-Prüfungen, Vertragsbezeichnungen — unverändert.
 
 --------------------------------------------------------------------------------
+[2026-10-14] MAY-PORTFOLIO-CAREER-SCROLL-RETURN-01 — Navigation Knoten ↔ Detail
+--------------------------------------------------------------------------------
+- Gewünschtes Verhalten umgesetzt: Öffnen einer Station scrollt zur
+  Überschrift des gerenderten Detailpanels (Sticky-Abstand live gemessen,
+  Ruhelage 97px bei 73px Nav — Überschrift nie verdeckt) und setzt den
+  Fokus auf die Panel-Überschrift (tabindex="-1", focus mit preventScroll
+  gegen Doppelsprünge).
+- Schließen (egal ob Schließen-Button, Toggle auf denselben Knoten oder
+  Tastatur) scrollt zurück zum tatsächlich auslösenden Element und gibt
+  ihm den Fokus. Stationswechsel aktualisiert das Rücksprungziel automatisch
+  (Element-Referenz statt ID-Lookup).
+- Echtbefund während der Prüfung: In der Kompetenzansicht erscheint dieselbe
+  Station in mehreren Gruppen (z. B. gh-inchorus in Java UND Daten). Ein
+  ID-basierter Rücksprung hätte zum falschen Chip geführt — behoben durch
+  direkte Referenz auf das auslösende Element (event.currentTarget).
+- Fallback: Ist das auslösende Element nach einem Ansichtswechsel nicht mehr
+  im DOM (isConnected), kehrt die Ansicht zur Karriere-Überschrift
+  („Erfahrung vernetzen. Zukunft gestalten.") mit Fokus zurück.
+- Bewegung: sanftes Scrollen normal, sofortiges Scrollen bei
+  prefers-reduced-motion (verifiziert: scrollΔ=894px innerhalb 450ms,
+  Ruhelage titleTop=89px). Ein rAF pro Aktion nach dem Rendern — keine
+  Timeout-Ketten; vorhandene Handler/Effekte verursachen keine Doppelsprünge.
+- Checks: tsc / lint (0 Warnungen, exhaustive-deps sauber via useCallback) /
+  build PASS. Neu: 27/27 Scroll-E2E (Maus, Tastatur, Touch/Mobil, beide
+  Ansichten, RM, Ruhelage, Fokus, Fallback). Regressionen: 46/46 Bestandssuite,
+  55/55 Scope-Suite, 0 pageerrors.
+- Belegt: Screenshots scroll-open-final.png / scroll-back-final.png
+  (/tmp/opencode/shots, nicht im Repo).
+
+--------------------------------------------------------------------------------
 OPEN ITEMS
 --------------------------------------------------------------------------------
 - Years of professional experience: wording without a number until clarified.
